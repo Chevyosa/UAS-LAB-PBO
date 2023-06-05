@@ -14,7 +14,7 @@ public class MyApp {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        POSFrame frame = new POSFrame();
+        LoginForm frame = new LoginForm();
         frame.setVisible(true);
         
     }

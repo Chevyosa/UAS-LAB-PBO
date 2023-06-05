@@ -181,13 +181,13 @@ public class LoginForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jUserActionPerformed
 
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
-        String uss = jUser.getText();
+       String uss = jUser.getText();
        String pass = jPass.getText();
        String passnew = md5Java(pass);
        
        try{
             Statement stmt = DBConnector.connection.createStatement();
-            String sql = "SELECT * FROM admin Where username = '"+uss+"' AND password = '"+passnew+"'";
+            String sql = "SELECT * FROM login Where username = '"+uss+"' AND pass = '"+passnew+"'";
             ResultSet rs = stmt.executeQuery(sql);
             if(rs.next()){
                JOptionPane.showMessageDialog(this, "Berhasil Login");
@@ -204,12 +204,12 @@ public class LoginForm extends javax.swing.JFrame {
     }//GEN-LAST:event_LoginButtonActionPerformed
 
     
-    private boolean authenticate(String username, String password) {
+    private boolean authenticate(String username, String pass) {
         try {
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/labpbo_kasir", "root", "");
             Statement stmt = conn.createStatement();
 
-            ResultSet rs = stmt.executeQuery("SELECT COUNT(*) AS count FROM login WHERE username = '" + username + "' AND pass = '" + password + "';");
+            ResultSet rs = stmt.executeQuery("SELECT COUNT(*) AS count FROM login WHERE username = '" + username + "' AND pass = '" + pass + "';");
             rs.next();
             int count = rs.getInt("count");
 
