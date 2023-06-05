@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import javax.swing.Timer;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
@@ -35,47 +34,40 @@ public class FormPayment extends javax.swing.JFrame {
         ListBarang = Barang.ListBarang;
         System.out.println(ListBarang.size());
         initComponents();
-        generalID();
+        ID();
         
-        daftarModel = ListTable.getModel();
-        
+        daftarModel = ListTable.getModel();       
         daftarModel.addTableModelListener(new TableModelListener()
                 {
-            @Override
-            public void tableChanged(TableModelEvent e) {
-           
-            System.out.println("Table Changed");
-            
-            if(e.getColumn()==5){
-                 float total;
-                 float totalBelanja=0.0f;
-                
-               for(int i=0;i<jumlahBelanja;i++){
-                    total = (float)daftarModel.getValueAt(i, 5);
-                    totalBelanja = totalBelanja+total;
-               } 
-               int totalBelanjaInt = (int)totalBelanja;
-               GrandTotal.setText(String.format("%,d",totalBelanjaInt));
-            }
-                  
-                
-            }
-                    
+                    @Override
+                    public void tableChanged(TableModelEvent e){  
+                        System.out.println("Table Changed");  
+                        if(e.getColumn()==5){
+                             float total;
+                             float totalBelanja=0.0f;
+
+                           for(int i=0;i<jumlahBelanja;i++){
+                                total = (float)daftarModel.getValueAt(i, 5);
+                                totalBelanja = totalBelanja+total;
+                           } 
+                           int totalBelanjaInt = (int)totalBelanja;
+                           GrandTotal.setText(String.format("%,d",totalBelanjaInt));
+                        }      
+                    }                 
                 }
-        
         );
     }
     
-    private void generalID(){
+    private void ID(){
         try {
             Statement stmt = DBConnector.connection.createStatement();
             String sql = "SELECT COUNT(*) as jumlah_transaksi FROM total_transaksi";
             ResultSet rs = stmt.executeQuery(sql);
             rs.next();
-            int JumlahData = rs.getInt("jumlah_transaksi");
-            System.out.println(JumlahData);
-            int GeneralID = JumlahData+1;
-            String idTransString = String.format("TR%03d", GeneralID);
+            int Data = rs.getInt("jumlah_transaksi");
+            System.out.println(Data);
+            int ID = Data+1;
+            String idTransString = String.format("FP%03d", ID);
 
             ID_Transaksi.setText(idTransString);            
         } catch (SQLException ex) {
@@ -98,13 +90,13 @@ public class FormPayment extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        ID_Transaksi = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         ID_Item = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         NamaBarang = new javax.swing.JTextField();
-        ID_Transaksi = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         ListTable = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
@@ -116,6 +108,8 @@ public class FormPayment extends javax.swing.JFrame {
         SimpanDatabase = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
         JumlahItem = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        HargaItem = new javax.swing.JTextField();
 
         jLabel8.setText("jLabel8");
 
@@ -127,21 +121,37 @@ public class FormPayment extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Form Payment");
 
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        jLabel5.setText("ID Transaksi :");
+
+        ID_Transaksi.setEditable(false);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(308, 308, 308)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(245, 245, 245)
+                        .addComponent(jLabel5)
+                        .addGap(18, 18, 18)
+                        .addComponent(ID_Transaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(305, 305, 305)
+                        .addComponent(jLabel1)))
+                .addContainerGap(263, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
+                .addGap(12, 12, 12)
                 .addComponent(jLabel1)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ID_Transaksi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -159,12 +169,7 @@ public class FormPayment extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel4.setText(" Nama Barang :");
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
-        jLabel5.setText("ID Transaksi :");
-
         NamaBarang.setEditable(false);
-
-        ID_Transaksi.setEditable(false);
 
         ListTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -234,6 +239,16 @@ public class FormPayment extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        jLabel2.setText("Harga Barang :");
+
+        HargaItem.setEditable(false);
+        HargaItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                HargaItemActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -250,14 +265,14 @@ public class FormPayment extends javax.swing.JFrame {
                                     .addComponent(NamaBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(ID_Item, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 188, Short.MAX_VALUE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10)
-                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ID_Transaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(JumlahItem, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(JumlahItem, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                            .addComponent(HargaItem)))
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -281,13 +296,11 @@ public class FormPayment extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel3)
-                        .addComponent(ID_Item, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(ID_Transaksi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel5)))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(ID_Item, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(HargaItem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -393,7 +406,7 @@ public class FormPayment extends javax.swing.JFrame {
         
         this.dispose();
         new FormPayment().setVisible(true);
-        generalID();
+        ID();
     }//GEN-LAST:event_SimpanDatabaseActionPerformed
 
     private void ID_ItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ID_ItemActionPerformed
@@ -405,7 +418,7 @@ public class FormPayment extends javax.swing.JFrame {
             tempBarang = ListBarang.get(i); 
             if(tempBarang.id_item.equals(kodeInput)){     
                 NamaBarang.setText(tempBarang.nama_item);
-                JumlahItem.setText(Float.toString(tempBarang.harga_item));
+                HargaItem.setText(Float.toString(tempBarang.harga_item));
                 JumlahItem.setText("1");
                 ditemukan = true;
             }
@@ -416,6 +429,7 @@ public class FormPayment extends javax.swing.JFrame {
            JOptionPane.showMessageDialog(this, "Barang dengan ID yang diinputkan tidak ditemukan", "ERROR ID", JOptionPane.ERROR_MESSAGE);
            ID_Item.setText("");
            NamaBarang.setText("");
+           HargaItem.setText("");
        }
     }//GEN-LAST:event_ID_ItemActionPerformed
 
@@ -452,7 +466,12 @@ public class FormPayment extends javax.swing.JFrame {
         ID_Item.setText("");
         NamaBarang.setText("");
         JumlahItem.setText("");
+        HargaItem.setText("");
     }//GEN-LAST:event_JumlahItemActionPerformed
+
+    private void HargaItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HargaItemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_HargaItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -492,6 +511,7 @@ public class FormPayment extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField BayarBelanja;
     private javax.swing.JTextField GrandTotal;
+    private javax.swing.JTextField HargaItem;
     private javax.swing.JTextField ID_Item;
     private javax.swing.JTextField ID_Transaksi;
     private javax.swing.JTextField JumlahItem;
@@ -501,6 +521,7 @@ public class FormPayment extends javax.swing.JFrame {
     private javax.swing.JButton SimpanDatabase;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
